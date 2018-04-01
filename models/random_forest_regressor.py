@@ -1,4 +1,4 @@
-# module random_forest_cvparam.py
+# module random_forest_regressor.py
 
 # imports
 from __future__ import print_function
