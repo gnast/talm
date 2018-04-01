@@ -5,8 +5,8 @@ from __future__ import print_function
 from __future__ import division
 from sklearn.ensemble import GradientBoostingRegressor
 from data_helper import load_test_case
+from model_helper import model_result
 import pandas as pd
-import numpy as np
 import time
 import csv
 
@@ -39,20 +39,13 @@ if __name__ == "__main__":
     rf.fit(train_features, train_labels)
 
     predictions = rf.predict(test_features)
-    # print(predictions)
 
-    # Calculate the absolute erros
-    errors = abs(predictions - test_labels)
-    print("Errors f(pred - test):", errors)
+    model_helper_obj = model_result(model=rf, predictions=predictions, test_labels=test_labels,
+                                    feature_list=feature_list, rf_feat_imp=rf.feature_importances_)
 
-    # Print out the mean absolute error (mae)
-    print("Mean Absolute Error:", round(np.mean(errors), 2), "degrees.")
-
-    # Calculate mean absolute percentage error (MAPE)
-    mape = 100 * (errors / test_labels)
-    print(mape)
-
-    # Calculate and display accuracy
-    accuracy = 100 - np.mean(mape)
+    model_helper_obj.save_model("gb_v1")
+    model_helper_obj.model_absolute_errors()
+    model_helper_obj.model_accuracy()
+    model_helper_obj.plot_var_importance()
 
     print("Duration in Seconds:", (time.time() - start_time))
